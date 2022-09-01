@@ -1,0 +1,102 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<title>Upload de arquivo do Firebase</title> 
+
+<meta 
+name="viewport" 
+content="width=device-width, initial-scale=1, maximum-scale=1" 
+/ > 
+</head> 
+<body> 
+<div> 
+Carregar arquivos<br /> 
+<input type="file" id="files" multiple /><br /><br /> 
+<button id="send">Carregar< /button> 
+<p id="uploading"></p> 
+<progress value="0" max="100" id="progress"></progress> 
+</div> 
+
+<!-- O SDK principal do Firebase JS é sempre obrigatório e deve ser listado primeiro -->
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script> 
+
+<!-- TODO: Add SDKs for Firebase products that you want to use -- >
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-storage.js"></script> 
+
+<script> 
+// Configuração do Firebase do seu aplicativo da web 
+var firebaseConfig = { 
+apiKey: "AIzaSyBoG9dJfOFbQQA7tYMPsfJesT16AvUBAyY",
+  authDomain: "file-upload-ef327.firebaseapp.com",
+  databaseURL: "https://file-upload-ef327.firebaseio.com",
+  projectId: "file-upload-ef327",
+  storageBucket: "file-upload-ef327.appspot.com",
+  messagingSenderId: "827075638365",
+  appId: "1:827075638365:web:73249a41e54cf48d0f09b4"
+}; 
+// Inicializa o Firebase 
+firebase.initializeApp(firebaseConfig); 
+</script> 
+
+<script>
+
+document.getElementById("files").addEventListener("change", function(e) { 
+  files = e.target.files; 
+  for (let i = 0; i < files.length; i++) { 
+    console.log(files[ i]); 
+  } 
+}); 
+
+document.getElementById("send").addEventListener("click", function() { 
+  //verifica se os arquivos estão selecionados 
+  if (files.length != 0) { 
+    //Percorre todos os arquivos selecionados 
+    for (let i = 0) ; i < files.length; i++) { 
+      //cria uma referência de armazenamento 
+      var storage = firebase.storage().ref(files[i].name); 
+
+      //envia o arquivo 
+      var upload = storage.put(files[i] ); 
+
+      //atualiza a barra de progresso 
+      upload.on( 
+        "
+        function progress(snapshot) { 
+          var percent = 
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100; 
+          document.getElementById("progresso").value = porcentagem; 
+        }, 
+
+        function error() { 
+          alert("erro ao enviar arquivo"); 
+        }, 
+
+        function complete() { 
+          document.getElementById( 
+            "enviando" 
+          ).innerHTML += `${files[i].name} carregado <br />`; 
+        } 
+      ); 
+    } 
+  } else { 
+    alert("Nenhum arquivo escolhido"); 
+  } 
+}); 
+
+function getFileUrl(filename) { 
+  //cria uma referência de armazenamento
+  var storage = firebase.storage().ref(filename); 
+
+  //obter 
+  armazenamento de url do arquivo 
+    .getDownloadURL() .then 
+    (function(url) { 
+      console.log(url); 
+    }) 
+    .catch(function(error) { 
+      console.log("error found"); 
+    }); 
+} 
+</script> 
+</body> 
+</html>
